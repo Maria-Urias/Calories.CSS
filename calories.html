@@ -1,15 +1,437 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Shape Up! | Calorie Counter</title>
-</head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shape Up! | Calorie Counter</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #3b82f6;
+      --primary-dark: #2563eb;
+      --danger: #ef4444;
+      --success: #10b981;
+      --border: #dbe3ee;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --radius: 18px;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #eef4ff 0%, #f8fbff 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .page {
+      width: min(100%, 1100px);
+      margin: 0 auto;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 24px;
+      padding: 24px 16px 8px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      margin-bottom: 8px;
+      color: #0f172a;
+    }
+
+    .hero p {
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      color: var(--muted);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    .card h2 {
+      font-size: 1.3rem;
+      margin-bottom: 16px;
+      color: #111827;
+    }
+
+    .budget-box {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      align-items: end;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    input,
+    select,
+    button {
+      width: 100%;
+      font: inherit;
+      border-radius: 12px;
+    }
+
+    input,
+    select {
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+    }
+
+    input:focus,
+    select:focus {
+      outline: 2px solid rgba(59, 130, 246, 0.2);
+      border-color: var(--primary);
+    }
+
+    .entry-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    button {
+      border: none;
+      padding: 13px 16px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.15s ease, background 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .summary-item {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      background: #fafcff;
+    }
+
+    .summary-item h3 {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .summary-item p {
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      font-weight: 800;
+    }
+
+    .remaining {
+      color: var(--success);
+    }
+
+    .warning {
+      color: var(--danger);
+    }
+
+    .entries-list {
+      margin-top: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .entry-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid var(--border);
+      padding: 14px;
+      border-radius: 12px;
+      background: #fbfdff;
+      flex-wrap: wrap;
+    }
+
+    .entry-item strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .entry-item span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .empty-state {
+      color: var(--muted);
+      text-align: center;
+      padding: 18px;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+    }
+
+    @media (min-width: 700px) {
+      .budget-box {
+        grid-template-columns: 1fr auto;
+      }
+
+      .entry-grid {
+        grid-template-columns: 1.2fr 1fr 1fr;
+      }
+
+      .actions {
+        flex-direction: row;
+      }
+
+      .actions button {
+        width: auto;
+        min-width: 160px;
+      }
+
+      .summary {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 950px) {
+      .app {
+        grid-template-columns: 1.2fr 0.8fr;
+        align-items: start;
+      }
+
+      .summary {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
 <body>
-	<main>
-	    <h1>Calorie Counter</h1>
-		<h2>Under Construction</h2>	      
-    </main>
+  <main class="page">
+    <section class="hero">
+      <h1>Calorie Counter</h1>
+      <p>
+        Track your daily calorie budget, food intake, and exercise in one responsive layout
+        designed to fit smaller to larger screens.
+      </p>
+    </section>
+
+    <section class="app">
+      <div class="card">
+        <h2>Daily Setup</h2>
+        <div class="budget-box">
+          <div>
+            <label for="budget">Daily Calorie Budget</label>
+            <input type="number" id="budget" placeholder="Enter your daily calories" />
+          </div>
+          <button class="btn-primary" onclick="setBudget()">Set Budget</button>
+        </div>
+
+        <div style="margin-top: 24px;">
+          <h2>Add Entry</h2>
+          <div class="entry-grid">
+            <div>
+              <label for="entryName">Entry Name</label>
+              <input type="text" id="entryName" placeholder="e.g. Breakfast or Walking" />
+            </div>
+
+            <div>
+              <label for="entryCalories">Calories</label>
+              <input type="number" id="entryCalories" placeholder="e.g. 350" />
+            </div>
+
+            <div>
+              <label for="entryType">Type</label>
+              <select id="entryType">
+                <option value="food">Food</option>
+                <option value="exercise">Exercise</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn-primary" onclick="addEntry()">Add Entry</button>
+            <button class="btn-secondary" onclick="clearAll()">Clear All</button>
+          </div>
+        </div>
+
+        <div style="margin-top: 24px;">
+          <h2>Entries</h2>
+          <div id="entriesList" class="entries-list">
+            <div class="empty-state">No entries added yet.</div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="card">
+        <h2>Summary</h2>
+        <div class="summary">
+          <div class="summary-item">
+            <h3>Budget</h3>
+            <p id="budgetDisplay">0</p>
+          </div>
+
+          <div class="summary-item">
+            <h3>Food Calories</h3>
+            <p id="foodDisplay">0</p>
+          </div>
+
+          <div class="summary-item">
+            <h3>Exercise Calories</h3>
+            <p id="exerciseDisplay">0</p>
+          </div>
+
+          <div class="summary-item">
+            <h3>Remaining</h3>
+            <p id="remainingDisplay" class="remaining">0</p>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    let budget = 0;
+    let entries = [];
+
+    function setBudget() {
+      const budgetInput = document.getElementById("budget");
+      budget = Number(budgetInput.value) || 0;
+      updateSummary();
+    }
+
+    function addEntry() {
+      const nameInput = document.getElementById("entryName");
+      const caloriesInput = document.getElementById("entryCalories");
+      const typeInput = document.getElementById("entryType");
+
+      const name = nameInput.value.trim();
+      const calories = Number(caloriesInput.value);
+      const type = typeInput.value;
+
+      if (!name || !calories) {
+        alert("Please enter a valid name and calorie amount.");
+        return;
+      }
+
+      entries.push({ name, calories, type });
+
+      nameInput.value = "";
+      caloriesInput.value = "";
+      typeInput.value = "food";
+
+      renderEntries();
+      updateSummary();
+    }
+
+    function clearAll() {
+      budget = 0;
+      entries = [];
+      document.getElementById("budget").value = "";
+      document.getElementById("entryName").value = "";
+      document.getElementById("entryCalories").value = "";
+      document.getElementById("entryType").value = "food";
+      renderEntries();
+      updateSummary();
+    }
+
+    function renderEntries() {
+      const list = document.getElementById("entriesList");
+
+      if (entries.length === 0) {
+        list.innerHTML = '<div class="empty-state">No entries added yet.</div>';
+        return;
+      }
+
+      list.innerHTML = entries
+        .map(
+          (entry) => `
+            <div class="entry-item">
+              <div>
+                <strong>${entry.name}</strong>
+                <span>${entry.type === "food" ? "Food" : "Exercise"}</span>
+              </div>
+              <strong>${entry.calories} cal</strong>
+            </div>
+          `
+        )
+        .join("");
+    }
+
+    function updateSummary() {
+      const food = entries
+        .filter((entry) => entry.type === "food")
+        .reduce((sum, entry) => sum + entry.calories, 0);
+
+      const exercise = entries
+        .filter((entry) => entry.type === "exercise")
+        .reduce((sum, entry) => sum + entry.calories, 0);
+
+      const remaining = budget - food + exercise;
+
+      document.getElementById("budgetDisplay").textContent = budget;
+      document.getElementById("foodDisplay").textContent = food;
+      document.getElementById("exerciseDisplay").textContent = exercise;
+
+      const remainingDisplay = document.getElementById("remainingDisplay");
+      remainingDisplay.textContent = remaining;
+      remainingDisplay.className = remaining >= 0 ? "remaining" : "warning";
+    }
+  </script>
 </body>
 </html>
