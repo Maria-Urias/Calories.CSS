@@ -1,0 +1,156 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  padding: 20px;
+}
+.container {
+  max-width: 1200px;
+  margin: auto;
+  background: white;
+  border: 1px solid #ccc;
+}
+
+.header {
+  background: linear-gradient(to bottom, #ffffff, #dbe7f5);
+  padding: 20px;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo {
+  width: 80px;
+}
+
+.header h1 {
+  color: #2b6cb0;
+  font-size: 42px;
+  font-style: italic;
+}
+
+.header h2 {
+  font-size: 28px;
+  margin-top: 5px;
+}
+
+.navbar {
+  background-color: #4f81bd;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 15px;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.navbar a:hover {
+  background-color: #3b6a9e;
+  border-radius: 5px;
+}
+
+.main-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  padding: 30px;
+}
+.title {
+  color: #8b1e1e;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 36px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 2px solid #333;
+}
+
+thead {
+  background-color: #4f81bd;
+  color: white;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+.sidebar {
+  border: 2px solid #7aa0c4;
+  border-radius: 20px;
+  padding: 20px;
+  height: fit-content;
+}
+
+.sidebar h3 {
+  color: #8b1e1e;
+  margin-bottom: 20px;
+  font-size: 30px;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar li {
+  margin-bottom: 15px;
+}
+
+.sidebar a {
+  color: #4f81bd;
+  font-weight: bold;
+}
+
+/* FOOTER */
+.footer {
+  background-color: #4f81bd;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: 20px;
+}
+@media (max-width: 768px) {
+
+  .main-content {
+    grid-template-columns: 1fr;
+  }
+
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .header h1 {
+    font-size: 30px;
+  }
+
+  .header h2 {
+    font-size: 20px;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
